@@ -3,11 +3,11 @@
 Render a tag; if it contains '>', then it's an attr in a self closing tag.
 */
 function render(content, tag, classlist){
-  if (tag.index_of(">") >= 0){
-    return "<" + tag.split("<")[0] + " " + "class='" + classlist.join(" ") + "'" + tag.split("<")[1] + "='" + content + "'/>"
+  if (tag.indexOf(">") >= 0){
+    return "<div class='" + classlist.join(" ") + "'><" + tag.split(">")[0] + " " + tag.split(">")[1] + "='" + content + "'/></div>"
   }
   else{
-    return "<" + tag + "class='" + classlist.join(" ") + "'" + ">" + content +  "</" + tag + ">";
+    return "<div class='" + classlist.join(" ") + "'" + "><" + tag + ">" + content +  "</" + tag + "></div>";
   }
 }
 
@@ -33,3 +33,36 @@ function translate(doc, rules, classlist){
   }
   return result;
 }
+
+// test
+
+var doc = {records:{
+  dog: {
+    name: 'Woofkers',
+    img: 'img/woofkers_1.png'
+  },
+  cat: {
+    name: 'Meowlia',
+    img: 'img/meowlia_4.jpg',
+    phrase: 'Love to meow',
+    cat_score: 5
+  }
+}
+}
+
+var rules = {
+records:{
+  dog: {
+    name: 'h1',
+    img: 'img>src'
+  },
+  cat: {
+    name: 'h1',
+    phrase: 'p',
+    cat_score: 'span',
+    img: 'img>src'
+  }
+}
+}
+
+translate(doc, rules, [])
