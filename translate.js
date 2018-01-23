@@ -22,7 +22,7 @@ function translate(doc, rules, classlist){
         classlist = classlist.concat(rule_key);
         // if it's a string, render
         if (typeof rules[rule_key] === 'string' || rules[rule_key] instanceof String){
-          result = result + "<br/>" + render(work_doc, rules[rule_key], classlist);
+          result = result + render(work_doc, rules[rule_key], classlist);
         }
         else {
           result = result + translate(work_doc, rules[rule_key], classlist);
@@ -34,35 +34,12 @@ function translate(doc, rules, classlist){
   return result;
 }
 
+function run(doc, rules){
+  var style = "";
+  if (rules.style){
+    style = '<link rel="stylesheet" href="' + rules.style + '">'
+  }
+  return "<html>" + style + translate(doc, rules, []) + "</html>";
+}
+
 // test
-
-var doc = {records:{
-  dog: {
-    name: 'Woofkers',
-    img: 'img/woofkers_1.png'
-  },
-  cat: {
-    name: 'Meowlia',
-    img: 'img/meowlia_4.jpg',
-    phrase: 'Love to meow',
-    cat_score: 5
-  }
-}
-}
-
-var rules = {
-records:{
-  dog: {
-    name: 'h1',
-    img: 'img>src'
-  },
-  cat: {
-    name: 'h1',
-    phrase: 'p',
-    cat_score: 'span',
-    img: 'img>src'
-  }
-}
-}
-
-translate(doc, rules, [])
