@@ -16,9 +16,28 @@ Translate a json document to html/xml using provided rules
 */
 function translate(doc, rules, classlist){
   var result = "";
+
   for(var rule_key in rules){
       var work_doc = doc[rule_key]
-      if (work_doc){
+      if (Array.isArray(work_doc)){
+        classlist = classlist.concat(rule_key);
+        result = result + "<ul class='" + classlist.join(" ")+ "'>";
+        for(let list_ind in work_doc){
+          let list_item = work_doc[list_ind];
+          result = result + "<li>";
+          // TODO reuse! oh no
+          if (typeof rules[rule_key] === 'string' || rules[rule_key] instanceof String){
+            result = result + render(list_item, rules[rule_key], classlist);
+          } else {
+            result = result + translate(list_item, rules[rule_key], classlist);
+          }
+          console.log(list_item);
+          console.log(rules[rule_key]);
+          result = result + "</li>";
+        }
+        result = result + "</ul>";
+      }
+      else if (work_doc){
         classlist = classlist.concat(rule_key);
         // if it's a string, render
         if (typeof rules[rule_key] === 'string' || rules[rule_key] instanceof String){
@@ -41,5 +60,3 @@ function run(doc, rules){
   }
   return "<html>" + style + translate(doc, rules, []) + "</html>";
 }
-
-// test
